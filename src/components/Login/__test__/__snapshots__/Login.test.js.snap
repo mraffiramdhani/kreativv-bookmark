@@ -1,11 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`matches snapshot 1`] = `
+exports[`Examine Login Component matches snapshot 1`] = `
 <DocumentFragment>
-  <div>
-    <h1>
-      Hi
-    </h1>
-  </div>
+  <div />
 </DocumentFragment>
 `;

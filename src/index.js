@@ -7,15 +7,19 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import storage from "./redux/store";
 
+import Firebase, { FirebaseContext } from "./components/Firebase";
+
 const { store, persistor } = storage();
 
 const Main = () => {
   return (
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <App />
-      </PersistGate>
-    </Provider>
+    <FirebaseContext.Provider value={new Firebase()}>
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
+    </FirebaseContext.Provider>
   );
 };
 
