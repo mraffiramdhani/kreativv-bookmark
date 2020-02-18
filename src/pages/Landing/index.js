@@ -25,7 +25,7 @@ function Landing(props) {
             </Link>
             <Link to="/register">
               <p
-                className="bg-purple-200 hover:bg-purple-300 rounded-full uppercase text-indigo-600 py-3 px-6"
+                className="bg-purple-200 hover:bg-purple-300 rounded-full text-indigo-600 py-3 px-6"
                 data-testid="register_button"
               >
                 Register

@@ -3,7 +3,7 @@
 exports[`Examine Login Component matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="bg-blue-800 h-screen h-screen"
+    class="bg-blue-800 h-screen w-screen"
   >
     <div
       class="flex flex-col items-center flex-1 h-full justify-center px-4 sm:px-0"
@@ -34,8 +34,13 @@ exports[`Examine Login Component matches snapshot 1`] = `
                 <div
                   class="flex flex-col mt-4"
                 >
+                  <label
+                    class="block mb-2 text-sm font-bold text-gray-700"
+                  >
+                    Email
+                  </label>
                   <input
-                    class="flex-grow h-8 px-2 border rounded border-grey-400"
+                    class="flex-grow h-8 px-2 border rounded border-grey-400 shadow text-sm"
                     data-testid="email_input"
                     id="email"
                     name="email"
@@ -48,8 +53,13 @@ exports[`Examine Login Component matches snapshot 1`] = `
                 <div
                   class="flex flex-col mt-4"
                 >
+                  <label
+                    class="block mb-2 text-sm font-bold text-gray-700"
+                  >
+                    Password
+                  </label>
                   <input
-                    class="flex-grow h-8 px-2 rounded border border-grey-400"
+                    class="flex-grow h-8 px-2 rounded border border-grey-400 shadow text-sm"
                     data-testid="password_input"
                     id="password"
                     name="password"
@@ -70,31 +80,34 @@ exports[`Examine Login Component matches snapshot 1`] = `
                   </button>
                 </div>
               </form>
+              <hr
+                class="mb-6 border-t"
+              />
               <div
-                class="text-center my-4"
+                class="text-center"
               >
                 <a
-                  class="no-underline hover:underline text-blue-dark text-xs"
+                  class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
                   href="/password"
                 >
-                  Forgot Your Password?
+                  Forgot Password?
                 </a>
               </div>
               <div
-                class="flex flex-col items-center"
+                class="text-center"
               >
                 <a
-                  class="bg-gray-500 hover:bg-gray-700 text-center text-white text-sm font-semibold py-2 px-4 rounded w-3/4"
+                  class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
                   href="/register"
                 >
-                  Register
+                  Don't have an account yet? Register!
                 </a>
               </div>
             </div>
           </div>
         </div>
         <div
-          class="hidden md:block md:w-1/2 rounded-r-lg"
+          class="hidden md:block md:w-1/2 rounded-r-lg bg-yellow-400"
           style="background-image: url(book_reading-2.svg); background-position: center; background-size: cover;"
         />
       </div>

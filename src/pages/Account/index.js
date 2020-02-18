@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 function Account(props) {
-  return <div></div>;
+  return <div>Hello from Account Page</div>;
 }
 
 Account.propTypes = {};
