@@ -1,13 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
-import App from "./components/App";
+import App from "./pages/App";
+import "./styles.css";
 
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import storage from "./redux/store";
 
-import Firebase, { FirebaseContext } from "./components/Firebase";
+import Firebase, { FirebaseContext } from "./constants/Firebase";
 
 const { store, persistor } = storage();
 
