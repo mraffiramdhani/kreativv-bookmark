@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 import LandingImage from "../../assets/images/book_reading.svg";
+import * as ROUTES from "../../constants/routes";
 
 function Landing(props) {
   return (
@@ -15,22 +17,35 @@ function Landing(props) {
             Kreativv Bookmark
           </h3>
           <nav className="hidden md:flex text-lg">
-            <Link to="/login">
-              <p
-                className="text-indigo-600 hover:bg-purple-300 font-bold py-3 px-6 border border-indigo-600 rounded-full mx-6"
-                data-testid="login_button"
-              >
-                Login
-              </p>
-            </Link>
-            <Link to="/register">
-              <p
-                className="bg-purple-200 hover:bg-purple-300 rounded-full text-indigo-600 py-3 px-6"
-                data-testid="register_button"
-              >
-                Register
-              </p>
-            </Link>
+            {props.auth.data.user !== undefined ? (
+              <Link to={ROUTES.HOME}>
+                <p
+                  className="bg-purple-200 hover:bg-purple-300 rounded-full text-indigo-600 py-3 px-6"
+                  data-testid="home_button"
+                >
+                  Home
+                </p>
+              </Link>
+            ) : (
+              <React.Fragment>
+                <Link to={ROUTES.LOGIN}>
+                  <p
+                    className="text-indigo-600 hover:bg-purple-300 font-bold py-3 px-6 border border-indigo-600 rounded-full mx-6"
+                    data-testid="login_button"
+                  >
+                    Login
+                  </p>
+                </Link>
+                <Link to={ROUTES.REGISTER}>
+                  <p
+                    className="bg-purple-200 hover:bg-purple-300 rounded-full text-indigo-600 py-3 px-6"
+                    data-testid="register_button"
+                  >
+                    Register
+                  </p>
+                </Link>
+              </React.Fragment>
+            )}
           </nav>
           <button className="flex md:hidden flex-col absolute top-0 right-0 p-4 mt-5">
             <span className="w-5 h-px mb-1 bg-orange-500"></span>
@@ -49,7 +64,7 @@ function Landing(props) {
             <p className="text-gray-600 leading-relaxed mb-12">
               Track your progress of reading books.
             </p>
-            <Link to="/login">
+            <Link to={ROUTES.LOGIN}>
               <p className="bg-purple-300 hover:bg-purple-400 py-3 px-6 uppercase text-lg font-bold text-white rounded-full">
                 get started
               </p>
@@ -67,4 +82,10 @@ function Landing(props) {
   );
 }
 
-export default Landing;
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  };
+};
+
+export default connect(mapStateToProps)(Landing);

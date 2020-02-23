@@ -1,13 +1,35 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
 import { compose } from "recompose";
 import { withFirebase } from "../../constants/Firebase";
+import { connect } from "react-redux";
+import { setAuthUser } from "../../redux/action/auth";
 
 import LoginImage from "../../assets/images/book_reading-2.svg";
 import * as ROUTES from "../../constants/routes";
 
-function Login(props) {
+function LoginBase(props) {
+  const [error, setError] = useState(null);
+
+  const onLogin = data => {
+    props.firebase
+      .doSignInWithEmailAndPassword(data.email, data.password)
+      .then(authUser => {
+        setError(null);
+        props.setAuthUser(authUser);
+        props.history.push(ROUTES.HOME);
+      })
+      .catch(error => {
+        setError(error);
+      });
+  };
+
+  if (props.auth.data.user !== undefined) {
+    props.history.push(ROUTES.HOME);
+  }
+
   return (
     <div className="bg-blue-800 h-screen w-screen">
       <div className="flex flex-col items-center flex-1 h-full justify-center px-4 sm:px-0">
@@ -15,11 +37,11 @@ function Login(props) {
           className="flex rounded-lg shadow-lg w-full sm:w-3/4 lg:w-1/2 bg-white sm:mx-0"
           style={{ height: "500px" }}
         >
-          <div className="flex flex-col w-full md:w-1/2 p-4">
+          <div className="flex flex-col w-full md:w-1/2 px-4">
             <div className="flex flex-col flex-1 justify-center mb-8">
               <h1 className="text-blue-800 text-4xl text-center">Sign In</h1>
               <div className="w-full mt-4">
-                <LoginForm />
+                <LoginForm onSubmit={data => onLogin(data)} error={error} />
                 <hr className="my-6 border-t" />
                 <div className="text-center">
                   <Link
@@ -54,36 +76,25 @@ function Login(props) {
   );
 }
 
-function LoginFormBase(props) {
+function LoginForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
 
   const onSubmit = event => {
-    props.firebase
-      .doSignInWithEmailAndPassword(email, password)
-      .then(() => {
-        setEmail("");
-        setPassword("");
-        setError(null);
-        props.history.push(ROUTES.HOME);
-      })
-      .catch(error => {
-        setError(error);
-      });
-
     event.preventDefault();
+    const data = { email, password };
+    props.onSubmit(data);
   };
 
   return (
     <React.Fragment>
-      {error && (
+      {props.error !== null && (
         <div
           className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-center"
           role="alert"
         >
           <strong className="font-bold">Error!</strong>
-          <span className="block sm:inline ml-2">{error.message}</span>
+          <span className="block sm:inline ml-2">{props.error.message}</span>
         </div>
       )}
       <form className="form-horizontal w-3/4 mx-auto" method="POST" action="#">
@@ -133,7 +144,23 @@ function LoginFormBase(props) {
   );
 }
 
-const LoginForm = compose(withRouter, withFirebase)(LoginFormBase);
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setAuthUser: data => dispatch(setAuthUser(data))
+  };
+};
+
+const Login = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withRouter,
+  withFirebase
+)(LoginBase);
 
 LoginForm.propTypes = {
   email: PropTypes.string,

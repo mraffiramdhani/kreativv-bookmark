@@ -6,9 +6,9 @@ import * as ROUTE from "../../constants/routes";
 import LandingPage from "../Landing";
 import LoginPage from "../Login";
 import RegisterPage from "../Register";
-import HomePage from "../Home";
-import AccountPage from "../Account";
 import ForgotPasswordPage from "../ForgotPassword";
+
+import Dashboard from "../../container/Dashboard";
 
 const App = () => {
   return (
@@ -17,9 +17,8 @@ const App = () => {
         <Route exact path={ROUTE.LANDING} component={LandingPage} />
         <Route path={ROUTE.LOGIN} component={LoginPage} />
         <Route path={ROUTE.REGISTER} component={RegisterPage} />
-        <Route path={ROUTE.HOME} component={HomePage} />
-        <Route path={ROUTE.ACCOUNT} component={AccountPage} />
         <Route path={ROUTE.FORGET_PASSWORD} component={ForgotPasswordPage} />
+        <Dashboard />
       </Switch>
     </Router>
   );
