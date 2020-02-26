@@ -3,11 +3,29 @@ import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
 import { compose } from "recompose";
 import { withFirebase } from "../../constants/Firebase";
+import { connect } from "react-redux";
+import { setAuthUser } from "../../redux/action/auth";
 
 import RegisterImage from "../../assets/images/register.svg";
 import * as ROUTES from "../../constants/routes";
 
-function Register(props) {
+function RegisterBase(props) {
+  const [error, setError] = useState(null);
+
+  const onRegister = data => {
+    props.firebase
+      .doCreateUserWithEmailAndPassword(data.email, data.password)
+      .then(authUser => {
+        setError(null);
+        props.setAuthUser(authUser);
+        props.history.push(ROUTES.HOME);
+      })
+      .catch(error => {
+        console.log(error);
+        setError(error);
+      });
+  };
+
   return (
     <div className="font-sans bg-blue-800 py-12">
       <div className="container mx-auto">
@@ -25,7 +43,7 @@ function Register(props) {
               <h3 className="pt-4 text-4xl text-center text-blue-800">
                 Create an Account
               </h3>
-              <RegisterForm />
+              <RegisterForm onSubmit={data => onRegister(data)} error={error} />
             </div>
           </div>
         </div>
@@ -34,12 +52,11 @@ function Register(props) {
   );
 }
 
-function RegisterFormBase(props) {
+function RegisterForm(props) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm_password, setConfirmPassword] = useState("");
-  const [error, setError] = useState(null);
 
   const isInvalid =
     name === "" ||
@@ -48,33 +65,21 @@ function RegisterFormBase(props) {
     password !== confirm_password;
 
   const onSubmit = event => {
-    props.firebase
-      .doCreateUserWithEmailAndPassword(email, password)
-      .then(authUser => {
-        setName("");
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-        setError(null);
-        props.history.push(ROUTES.HOME);
-      })
-      .catch(error => {
-        console.log(error);
-        setError(error);
-      });
-
     event.preventDefault();
+
+    const data = { email, password };
+    props.onSubmit(data);
   };
 
   return (
     <React.Fragment>
-      {error && (
+      {props.error && (
         <div
           className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-center"
           role="alert"
         >
           <strong className="font-bold">Error!</strong>
-          <span className="block sm:inline ml-2">{error.message}</span>
+          <span className="block sm:inline ml-2">{props.error.message}</span>
         </div>
       )}
       <form className="px-8 pt-6 pb-8 mb-4 bg-white rounded">
@@ -172,14 +177,29 @@ function RegisterFormBase(props) {
   );
 }
 
-const RegisterForm = compose(withRouter, withFirebase)(RegisterFormBase);
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setAuthUser: data => dispatch(setAuthUser(data))
+  };
+};
+
+const Register = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withRouter,
+  withFirebase
+)(RegisterBase);
 
 RegisterForm.propTypes = {
   name: PropTypes.string,
   email: PropTypes.string,
   password: PropTypes.string,
-  confirm_password: PropTypes.string,
-  error: PropTypes.string
+  confirm_password: PropTypes.string
 };
 
 export default Register;
